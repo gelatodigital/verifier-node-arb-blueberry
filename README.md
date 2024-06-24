@@ -30,6 +30,8 @@
 - `verifier-macos/verifier-node-app-macos`
 - `verifier-win/verifier-node-app-win.exe`
 
+3. Get the [custom gas token of the chain](https://raas.gelato.network/rollups/details/public/arb-blueberry)
+
 ## Setting up
 
 ### Interactive CLI
