@@ -38,7 +38,7 @@ Before running a node, an ERC2771 node key is required.
 
 ### Getting the Gas Token
 
-To mint the node key, you need the custom gas token of the chain. Go to the [Arbitrum Blueberry public page](https://raas.gelato.network/rollups/details/public/arb-blueberry) and request the custom gas token from the faucet. After receiving it on Arbitrum Sepolia, bridge it to the Arbitrum Blueberry chain following the instructions on the page
+To mint the node key, you need the custom gas token of the chain. Go to the [Arbitrum Blueberry public page](https://raas.gelato.network/rollups/details/public/arb-blueberry) and request the custom gas token from the faucet. After receiving it on Arbitrum Sepolia, bridge it to the Arbitrum Blueberry chain following the instructions on the page.
 
 ### Minting the Key
 
@@ -62,7 +62,7 @@ After minting your node key, delegate rights to an `Operator` to sign attestatio
   - `tokenId`: ID of node key NFT
   - `rights`: `0x0000000000000000000000000000000000000000000000000000000000000000`
   - `enable`: true
-  - `Send native CGT`: `0`
+  - `send native CGT`: 0
 
 **Info:** For production projects, this step will be done on delegate.xyz.
 
@@ -130,6 +130,7 @@ To avoid entering settings each time you launch the application, you can use a `
    ```
 
 For a detailed tutorial, watch this [video](https://drive.google.com/file/d/1kY7JSdQXyWttXv-emBcAxJpzeP9fTuT2/view?usp=drive_link).
+
 ## Running the Node Client on a Server
 
 The verifier node is also available as a Docker image. Follow these steps to run it on a server, for example, on GCP:
