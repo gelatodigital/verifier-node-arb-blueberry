@@ -2,19 +2,51 @@
 
 ## Table of Contents
 
-1. [Installation](#installation)
-2. [Setting up](#setting-up)
+1. [Smart Contracts](#smart-contracts)
+2. [Minting Node Key](#minting-node-key)
+3. [Delegate rights to attest](#delegate-rights-to-attest)
+4. [Installation](#installation)
+5. [Setting up](#setting-up)
    - [Interactive CLI](#interactive-cli)
    - [Environment variables](#environment-variables)
    - [Required env variables](#required-env-variables)
      - [Option 1](#option-1)
      - [Option 2](#option-2)
    - [Optional env variables](#optional-env-variables)
-3. [Running on local machine](#running-on-local-machine)
-4. [Running on cloud server](#running-on-cloud-server)
-5. [Smart Contracts](#smart-contracts)
-   - [Minting Node Key](#minting-node-key)
-   - [Delegate rights to attest](#delegate-rights-to-attest)
+6. [Running on local machine](#running-on-local-machine)
+7. [Running on cloud server](#running-on-cloud-server)
+
+# Smart Contracts
+
+| Smart Contract   | Address                                       |
+| ---------------- | --------------------------------------------- |
+| MockNodeKey      | `0xf4D4a4f8B3F4799E7206511F1A2E112cB2329687`  |
+| MockRewardToken  | `0x0A1A96262498c707563859abC71ACA2ec38107FB1` |
+| NodeRewards      | `0xac89576FD6D45F244343827c18b3Cc0AA013bC35`  |
+| Referee          | `0xC7767767121Ec2cB831EF299b9F6db201cEAac8a`  |
+| DelegateRegistry | `0x00000000000000447e69651d841bD8D104Bed493`  |
+
+## Minting Node Key
+
+Before running a node, an ERC2771 node key is required. Call the mint function on the contract below to get a node key.
+
+### [`MockNodeKey.mint`](https://arb-blueberry.gelatoscout.com/address/0xf4D4a4f8B3F4799E7206511F1A2E112cB2329687?tab=write_proxy)
+
+- `_to`: Address to mint to.
+- `_amount`: Number of NFT to mint.
+
+## Delegate rights to attest
+
+After minting your node key, with the wallet which holds the node key, delegate rights to an `Operator` which will use to sign attestation transcations on your behalf.
+
+### [`DelegateRegistry.delegateERC721`](https://arb-blueberry.gelatoscout.com/address/0x00000000000000447e69651d841bD8D104Bed493?tab=write_contract)
+
+- `to`: Operator address.
+- `contract_`: `0xf4D4a4f8B3F4799E7206511F1A2E112cB2329687` (MockNodeKey address).
+- `tokenId`: ID of node key NFT.
+- `rights`: `0x0000000000000000000000000000000000000000000000000000000000000000`
+- `enable`: true
+- `Send native CGT`: `0`
 
 ## Installation
 
@@ -60,7 +92,8 @@ WALLETS=[]
 #-------------------------
 
 # Optionals
-DEBUG=
+DEBUG= # true/false
+ONCE= # true/false
 INTERVAL= # In ms (Must be > 60000)
 L1_RPC_URL=
 # Your personal RPC url of settlement chain (Arbitrum Sepolia RPC)
@@ -90,6 +123,7 @@ Automatically fetch all node key IDs that have delegated to the operator.
 ### Optional env variables
 
 - `DEBUG`: Debug mode.
+- `ONCE`: Runs the script once and exits.
 - `INTERVAL`: Interval between runs.
 - `L1_RPC_URL`: Your personal RPC URL of the settlement chain. (Arbitrum Sepolia RPC)
 
@@ -108,31 +142,3 @@ On GCP for example,
 - Create a cloud run job pulling the `gelatodigital/blueberry-verifier` image.
 - Set up the env variables.
 - Add a scheduler trigger to execute the container every hour.
-
-# Smart Contracts
-
-| Smart Contract   | Address                                       |
-| ---------------- | --------------------------------------------- |
-| MockNodeKey      | `0xf4D4a4f8B3F4799E7206511F1A2E112cB2329687`  |
-| MockRewardToken  | `0x0A1A96262498c707563859abC71ACA2ec38107FB1` |
-| NodeRewards      | `0xac89576FD6D45F244343827c18b3Cc0AA013bC35`  |
-| Referee          | `0xC7767767121Ec2cB831EF299b9F6db201cEAac8a`  |
-| DelegateRegistry | `0x00000000000000447e69651d841bD8D104Bed493`  |
-
-### Minting Node Key
-
-### [`MockNodeKey.mint`](https://arb-blueberry.gelatoscout.com/address/0xf4D4a4f8B3F4799E7206511F1A2E112cB2329687?tab=write_proxy)
-
-- `_to`: Address to mint to.
-- `_amount`: Number of NFT to mint.
-
-### Delegate rights to attest
-
-### [`DelegateRegistry.delegateERC721`](https://arb-blueberry.gelatoscout.com/address/0x00000000000000447e69651d841bD8D104Bed493?tab=write_contract)
-
-- `to`: Operator address.
-- `contract_`: `0xf4D4a4f8B3F4799E7206511F1A2E112cB2329687` (MockNodeKey address).
-- `tokenId`: ID of node key NFT.
-- `rights`: `0x0000000000000000000000000000000000000000000000000000000000000000`
-- `enable`: true
-- `Send native CGT`: `0`
