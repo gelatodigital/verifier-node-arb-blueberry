@@ -1,144 +1,143 @@
-# Arbitrum Blueberry Verifier Node
+# Arbitrum Blueberry Verifier Node Guide
 
 ## Table of Contents
 
-1. [Smart Contracts](#smart-contracts)
-2. [Minting Node Key](#minting-node-key)
-3. [Delegate rights to attest](#delegate-rights-to-attest)
-4. [Installation](#installation)
-5. [Setting up](#setting-up)
-   - [Interactive CLI](#interactive-cli)
-   - [Environment variables](#environment-variables)
-   - [Required env variables](#required-env-variables)
-     - [Option 1](#option-1)
-     - [Option 2](#option-2)
-   - [Optional env variables](#optional-env-variables)
-6. [Running on local machine](#running-on-local-machine)
-7. [Running on cloud server](#running-on-cloud-server)
+1. [Introduction](#introduction)
+2. [Downloading the Client](#downloading-the-client)
+3. [Minting the Node Key](#minting-the-node-key)
+   - [Getting the Gas Token](#getting-the-gas-token)
+   - [Minting the Key](#minting-the-key)
+4. [Delegating the Key](#delegating-the-key)
+5. [Getting a Gelato Relay API Key](#getting-a-gelato-relay-api-key)
+6. [Running the Node Client on a Personal Computer](#running-the-node-client-on-a-personal-computer)
+   - [Using the CLI](#using-the-cli)
+   - [Using the .env File](#using-the-env-file)
+7. [Running the Node Client on a Server](#running-the-node-client-on-a-server)
 
-# Smart Contracts
+## Introduction
 
-| Smart Contract   | Address                                       |
-| ---------------- | --------------------------------------------- |
-| MockNodeKey      | `0xf4D4a4f8B3F4799E7206511F1A2E112cB2329687`  |
-| MockRewardToken  | `0x0A1A96262498c707563859abC71ACA2ec38107FB1` |
-| NodeRewards      | `0xac89576FD6D45F244343827c18b3Cc0AA013bC35`  |
-| Referee          | `0xC7767767121Ec2cB831EF299b9F6db201cEAac8a`  |
-| DelegateRegistry | `0x00000000000000447e69651d841bD8D104Bed493`  |
+A Node Client verifies the accuracy of the data posted by the sequencer on the settlement layer to secure the rollup. It serves as an observation node that monitors the rollup protocol. Follow this guide to run a Node Client on Arbitrum Blueberry.
 
-## Minting Node Key
+## Downloading the Client
 
-Before running a node, an ERC2771 node key is required. Call the mint function on the contract below to get a node key.
-
-Get the [custom gas token of the chain](https://raas.gelato.network/rollups/details/public/arb-blueberry)
-
-### [`MockNodeKey.mint`](https://arb-blueberry.gelatoscout.com/address/0xf4D4a4f8B3F4799E7206511F1A2E112cB2329687?tab=write_proxy)
-
-- `_to`: Address to mint to.
-- `_amount`: Number of NFT to mint.
-
-## Delegate rights to attest
-
-After minting your node key, with the wallet which holds the node key, delegate rights to an `Operator` which will use to sign attestation transcations on your behalf.
-
-### [`DelegateRegistry.delegateERC721`](https://arb-blueberry.gelatoscout.com/address/0x00000000000000447e69651d841bD8D104Bed493?tab=write_contract)
-
-- `to`: Operator address.
-- `contract_`: `0xf4D4a4f8B3F4799E7206511F1A2E112cB2329687` (MockNodeKey address).
-- `tokenId`: ID of node key NFT.
-- `rights`: `0x0000000000000000000000000000000000000000000000000000000000000000`
-- `enable`: true
-- `Send native CGT`: `0`
-
-## Installation
-
-1. Download 1 of the following zip files depending on your machine.
+To begin, download the appropriate client based on your operating system:
 
 - `verifier-linux.zip`
 - `verifier-macos.zip`
 - `verifier-win.zip`
 
-2. Unzip the file and you will get a folder containing the verifier node application.
+Unzip the downloaded file to get a folder containing the verifier node application:
 
 - `verifier-linux/verifier-node-app-linux`
 - `verifier-macos/verifier-node-app-macos`
 - `verifier-win/verifier-node-app-win.exe`
 
-## Setting up
+## Minting the Node Key
 
-### Interactive CLI
+Before running a node, an ERC2771 node key is required.
 
-![CLI](assets/cli.png)
-Settings can be passed via the interactive cli just by launching the application.
+### Getting the Gas Token
 
-If you prefer not to enter the settings each time you launch the application, refer to [environment variables](#environment-variables).
+To mint the node key, you need the custom gas token of the chain. Go to the [Arbitrum Blueberry public page](https://raas.gelato.network/rollups/details/public/arb-blueberry) and request the custom gas token from the faucet. After receiving it on Arbitrum Sepolia, bridge it to the Arbitrum Blueberry chain following the instructions on the page
 
-### Environment variables
+### Minting the Key
 
-Create a `.env` file in the folder (e.g. `/verifier-macos`) containing the node application and fill up with the necessary variables.
+Once you have the gas token, mint the node key by calling the mint function on the contract:
 
-```
-OPERATOR_PK=
-RELAY_API_KEY=
+- Navigate to [`MockNodeKey.mint`](https://arb-blueberry.gelatoscout.com/address/0xf4D4a4f8B3F4799E7206511F1A2E112cB2329687?tab=write_proxy).
+- Fill in the required parameters:
+  - `_to`: Address to mint to
+  - `_amount`: Number of NFTs to mint
 
-# Set either one
-#------------1-------------
-NODE_KEY_IDS= # [1,2,3]
-#------------2-------------
-AUTO_KEY_IDS=true
-WALLETS=[]
-# [] (Use all fetched node key ids delegated to operator) or
-# ["0x...","0x..."] (Use fetched node key ids that are delegated to operator and owned by defined wallets.)
-#-------------------------
+**Info:** Projects can build a frontend page to make this process seamless and customized for users.
 
-# Optionals
-DEBUG= # true/false
-ONCE= # true/false
-INTERVAL= # In ms (Must be > 60000)
-L1_RPC_URL=
-# Your personal RPC url of settlement chain (Arbitrum Sepolia RPC)
-# Setting `L1_RPC_URL` is highly recommended for better reliability and performance.
-```
+## Delegating the Key
 
-### Required env variables
+After minting your node key, delegate rights to an `Operator` to sign attestation transactions on your behalf. This ensures secure and efficient operation of your node.
 
-- `OPERATOR_PK`: Operator private key which will use to sign the attestation.
-- `RELAY_API_KEY`: [Gelato Relay](https://app.gelato.network/relay) API key.
+- Navigate to [`DelegateRegistry.delegateERC721`](https://arb-blueberry.gelatoscout.com/address/0x00000000000000447e69651d841bD8D104Bed493?tab=write_contract).
+- Fill in the required parameters:
+  - `to`: Operator address
+  - `contract_`: `0xf4D4a4f8B3F4799E7206511F1A2E112cB2329687` (MockNodeKey address)
+  - `tokenId`: ID of node key NFT
+  - `rights`: `0x0000000000000000000000000000000000000000000000000000000000000000`
+  - `enable`: true
+  - `Send native CGT`: `0`
 
-#### Option 1
+**Info:** For production projects, this step will be done on delegate.xyz.
 
-Manually define a list of node key IDs that have delegated to the operator.
+## Getting a Gelato Relay API Key
 
-- `NODE_KEY_IDS`: A list of node key ids.
+The Gelato API Key is crucial for running the node as it allows the node to use Gelato Relay for transaction fees. This simplifies the process by enabling the use of various tokens (like USDC) to pay for gas fees.
 
-#### Option 2
+To obtain the Gelato API Key:
 
-Automatically fetch all node key IDs that have delegated to the operator.
+1. Go to [Gelato Relay](https://app.gelato.network/relay).
+2. Connect your wallet to create your account.
+3. Click "Create App" and complete the basic details.
+4. After creating the app, go to the details and copy the API key.
 
-**Important:** It is highly recommended to set and maintain a list of `WALLETS` that you want to attest for. Without specifying this list, you will end up attesting for all delegations to your operator, which may not be desirable.
+For a detailed tutorial, watch this [video]([For production projects, this step will be done on delegate.xyz](https://drive.google.com/file/d/1kY7JSdQXyWttXv-emBcAxJpzeP9fTuT2/view?usp=drive_link)).
 
-- `AUTO_KEY_IDS`: Automatically fetch node keys if true.
-- `WALLETS`: Only attest for fetched node key ids that are owned by defined wallets.
+## Running the Node Client on a Personal Computer
 
-### Optional env variables
+Follow these steps to run the verifier node.
 
-- `DEBUG`: Debug mode.
-- `ONCE`: Runs the script once and exits.
-- `INTERVAL`: Interval between runs.
-- `L1_RPC_URL`: Your personal RPC URL of the settlement chain. (Arbitrum Sepolia RPC)
+### Using the CLI
 
-**Note:** Setting `L1_RPC_URL` is highly recommended for better reliability and performance.
+1. Open the terminal or command prompt.
+2. Navigate to the directory containing the verifier node application.
+3. Execute the application:
+   - For Linux: `./verifier-node-app-linux`
+   - For macOS: `./verifier-node-app-macos`
+   - For Windows: `verifier-node-app-win.exe`
 
-## Running on local machine
+4. When prompted, enter the required details:
+   - Operator private key
+   - Gelato Relay API Key
+   - Node key IDs
 
-After setting up the environment variable, open the app to run the verifier node.
+If you follow all the correct steps, you should see a confirmation screen like this one:
 
-## Running on cloud server
+![Image](https://github.com/gelatodigital/verifier-node-arb-blueberry/assets/169910523/c2391d8d-cf8e-4fda-a686-e8e6be8d5adf)
 
-The verifier node is also available as a docker image [`gelatodigital/blueberry-verifier:latest`](https://hub.docker.com/r/gelatodigital/blueberry-verifier).
+### Using the .env File
 
-On GCP for example,
+To avoid entering settings each time you launch the application, you can use a `.env` file. Follow these steps:
 
-- Create a cloud run job pulling the `gelatodigital/blueberry-verifier` image.
-- Set up the env variables.
-- Add a scheduler trigger to execute the container every hour.
+1. Create a `.env` file in the folder containing the node application (e.g., `/verifier-macos`).
+2. Add the following environment variables to the `.env` file:
+
+   ```env
+   OPERATOR_PK=
+   RELAY_API_KEY=
+   # Set either one
+   #------------1-------------
+   NODE_KEY_IDS= # [1,2,3]
+   #------------2-------------
+   AUTO_KEY_IDS=true
+   WALLETS=[]
+   # [] (Use all fetched node key IDs delegated to operator) or
+   # ["0x...","0x..."] (Use fetched node key IDs that are delegated to operator and owned by defined wallets)
+   #-------------------------
+   # Optionals
+   DEBUG= # true/false
+   ONCE= # true/false
+   INTERVAL= # In ms (Must be > 60000)
+   L1_RPC_URL=
+   # Your personal RPC URL of settlement chain (Arbitrum Sepolia RPC)
+   # Setting `L1_RPC_URL` is highly recommended for better reliability and performance
+   ```
+
+For a detailed tutorial, watch this [video]([For production projects, this step will be done on delegate.xyz](https://drive.google.com/file/d/1kY7JSdQXyWttXv-emBcAxJpzeP9fTuT2/view?usp=drive_link)).
+## Running the Node Client on a Server
+
+The verifier node is also available as a Docker image. Follow these steps to run it on a server, for example, on GCP:
+
+1. Create a Cloud Run job pulling the `gelatodigital/blueberry-verifier` image.
+2. Set up the environment variables.
+3. Add a scheduler trigger to execute the container every hour.
+
+---
+
+This guide should help you set up and run the Arbitrum Blueberry Verifier Node. If you have any further questions or issues, please reach out to the team.
