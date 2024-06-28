@@ -30,6 +30,8 @@
 
 Before running a node, an ERC2771 node key is required. Call the mint function on the contract below to get a node key.
 
+Get the [custom gas token of the chain](https://raas.gelato.network/rollups/details/public/arb-blueberry)
+
 ### [`MockNodeKey.mint`](https://arb-blueberry.gelatoscout.com/address/0xf4D4a4f8B3F4799E7206511F1A2E112cB2329687?tab=write_proxy)
 
 - `_to`: Address to mint to.
@@ -61,8 +63,6 @@ After minting your node key, with the wallet which holds the node key, delegate 
 - `verifier-linux/verifier-node-app-linux`
 - `verifier-macos/verifier-node-app-macos`
 - `verifier-win/verifier-node-app-win.exe`
-
-3. Get the [custom gas token of the chain](https://raas.gelato.network/rollups/details/public/arb-blueberry)
 
 ## Setting up
 
