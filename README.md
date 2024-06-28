@@ -13,6 +13,7 @@
    - [Using the CLI](#using-the-cli)
    - [Using the .env File](#using-the-env-file)
 7. [Running the Node Client on a Server](#running-the-node-client-on-a-server)
+8. [Smart Contracts](#smart-contracts)
 
 ## Introduction
 
@@ -138,6 +139,10 @@ The verifier node is also available as a Docker image. Follow these steps to run
 1. Create a Cloud Run job pulling the `gelatodigital/blueberry-verifier` image.
 2. Set up the environment variables.
 3. Add a scheduler trigger to execute the container every hour.
+
+## Smart Contracts
+
+As part of the Verifier Node package, Gelato provides 3 smart contracts essential for this service. Read the specs of the smart contracts [here](https://github.com/gelatodigital/verifier-node-arb-blueberry/blob/master/SmartContracts.md).
 
 ---
 
