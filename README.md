@@ -77,7 +77,7 @@ To obtain the Gelato API Key:
 3. Click "Create App" and complete the basic details.
 4. After creating the app, go to the details and copy the API key.
 
-For a detailed tutorial, watch this [video]([For production projects, this step will be done on delegate.xyz](https://drive.google.com/file/d/1kY7JSdQXyWttXv-emBcAxJpzeP9fTuT2/view?usp=drive_link)).
+For a detailed tutorial, watch this [video](https://drive.google.com/file/d/1kY7JSdQXyWttXv-emBcAxJpzeP9fTuT2/view?usp=drive_link).
 
 ## Running the Node Client on a Personal Computer
 
@@ -129,7 +129,7 @@ To avoid entering settings each time you launch the application, you can use a `
    # Setting `L1_RPC_URL` is highly recommended for better reliability and performance
    ```
 
-For a detailed tutorial, watch this [video]([For production projects, this step will be done on delegate.xyz](https://drive.google.com/file/d/1kY7JSdQXyWttXv-emBcAxJpzeP9fTuT2/view?usp=drive_link)).
+For a detailed tutorial, watch this [video](https://drive.google.com/file/d/1kY7JSdQXyWttXv-emBcAxJpzeP9fTuT2/view?usp=drive_link).
 ## Running the Node Client on a Server
 
 The verifier node is also available as a Docker image. Follow these steps to run it on a server, for example, on GCP:
