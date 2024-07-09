@@ -13,7 +13,8 @@
    - [Using the CLI](#using-the-cli)
    - [Using the .env File](#using-the-env-file)
 7. [Running the Node Client on a Server](#running-the-node-client-on-a-server)
-8. [Smart Contracts](#smart-contracts)
+8. [Claiming rewards](#claiming-rewards)
+9. [Smart Contracts](#smart-contracts)
 
 ## Introduction
 
@@ -89,6 +90,7 @@ Follow these steps to run the verifier node.
 1. Open the terminal or command prompt.
 2. Navigate to the directory containing the verifier node application.
 3. Execute the application:
+
    - For Linux: `./verifier-node-app-linux`
    - For macOS: `./verifier-node-app-macos`
    - For Windows: `verifier-node-app-win.exe`
@@ -139,6 +141,28 @@ The verifier node is also available as a Docker image. Follow these steps to run
 1. Create a Cloud Run job pulling the `gelatodigital/blueberry-verifier` image.
 2. Set up the environment variables.
 3. Add a scheduler trigger to execute the container every hour.
+
+## Claiming rewards
+
+To claim rewards, call the `claimReward` function on the Referee smart contract.
+
+```ts
+function claimReward(uint256 nodeKeyId,uint256 numberOfBatches) external
+```
+
+With foundry cast:
+
+```
+$ cast calldata "claimReward(claimReward(uint256,uint256))" ${nodeKeyId} 50
+```
+
+You will get the payload to call that looks like `0x86bb8f3700000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000032`
+
+Send a transaction with the payload:
+
+```
+ $ cast send --rpc-url https://rpc.arb-blueberry.gelato.digital --private-key ${privateKey} 0xC7767767121Ec2cB831EF299b9F6db201cEAac8a ${payload}
+```
 
 ## Smart Contracts
 
